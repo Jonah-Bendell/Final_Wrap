@@ -1,11 +1,241 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WrapRide</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css">
+
+
 </head>
 <body>
+
+  <!-- navbar -->
+  <nav aria-label="Main navigation">
+    <a href="index.html" class="logo">WrapRide</a>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="calculator.html">Calculator</a></li>
+      <li><a href="shop.html">Wrap Shop</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="forum.html">Community</a></li>
+      <li><a href="calculator.html" class="nav-cta">Start Earning</a></li>
+    </ul>
+  </nav>
+
+  <!-- tagline -->
+  <section class="tag">
+    <h1>Get paid<br><span class="yellow">to drive.</span></h1>
+    <p>WrapRide connects everyday drivers with brands looking for real-world exposure. We put an ad on your car, you keep driving your normal routes and get paid every month.</p>
+    <div class="tag-btns">
+      <a href="calculator.html" class="btn-primary">Estimate My Earnings</a>
+      <a href="shop.html" class="btn-ghost">Browse Wraps</a>
+    </div>
+  </section>
+
+  <!-- fake earnings  -->
+  <div class="live-bar" aria-live="polite" aria-label="Live platform earnings">
+    <div class="live-dot" aria-hidden="true"></div>
+    <p class="live-text">WrapRide drivers have collectively earned <strong id="live-total">$0</strong> on the platform today.</p>
+  </div>
+
+  <!-- company stats (count-up on scroll) -->
+  <div class="stats" aria-label="Platform statistics">
+    <div class="stat">
+      <strong data-target="847" data-prefix="$">0</strong>
+      <span>avg. monthly earnings</span>
+    </div>
+    <div class="stat">
+      <strong data-target="14000" data-suffix="+">0</strong>
+      <span>active drivers</span>
+    </div>
+    <div class="stat">
+      <strong data-target="200" data-suffix="+">0</strong>
+      <span>brand campaigns</span>
+    </div>
+  </div>
+
+  <!-- description -->
+  <section class="section" id="how" aria-labelledby="how-heading">
+    <p class="section-label">How it works</p>
+    <h2 id="how-heading">Three steps to your first check.</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>Apply Online</h3>
+        <p>Fill out a quick form with your city, vehicle type, and weekly mileage. We match you with campaigns that fit your driving habits.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>Get Wrapped</h3>
+        <p>A certified installer comes to you. Full or partial wrap applied in under 48 hours — at zero cost to you. We handle everything.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3>Earn Monthly</h3>
+        <p>Drive your normal routes. Payments are calculated from your mileage and sent automatically every month, no check-ins required.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ads available section -->
+  <section class="section" aria-labelledby="wraps-heading">
+    <p class="section-label">Active campaigns</p>
+    <h2 id="wraps-heading">Brands paying out right now.</h2>
+    <div class="wraps-grid">
+      <div class="wrap-card">
+        <div class="wrap-thumb netflix" aria-label="Netflix campaign thumbnail">
+          <span aria-hidden="true"></span>
+        </div>
+        <div class="wrap-body">
+          <p class="wrap-brand">Netflix</p>
+          <h3>Stranger Things S5</h3>
+          <p class="wrap-meta">Full wrap &middot; 90 days &middot; <strong>$0.18 / mile</strong></p>
+        </div>
+      </div>
+      <div class="wrap-card">
+        <div class="wrap-thumb redbull" aria-label="Red Bull campaign thumbnail">
+          <span aria-hidden="true"></span>
+          <span class="wrap-badge">New</span>
+        </div>
+        <div class="wrap-body">
+          <p class="wrap-brand">Red Bull</p>
+          <h3>Summer Edition</h3>
+          <p class="wrap-meta">Partial wrap &middot; 60 days &middot; <strong>$0.22 / mile</strong></p>
+        </div>
+      </div>
+      <div class="wrap-card">
+        <div class="wrap-thumb spotify" aria-label="Spotify campaign thumbnail">
+          <span aria-hidden="true"></span>
+        </div>
+        <div class="wrap-body">
+          <p class="wrap-brand">Spotify</p>
+          <h3>Loud &amp; Clear</h3>
+          <p class="wrap-meta">Partial wrap &middot; 45 days &middot; <strong>$0.15 / mile</strong></p>
+        </div>
+      </div>
+    </div>
+    <a href="shop.html" class="btn-primary">View All Campaigns</a>
+  </section>
+
+  <!-- review -->
+  <section class="section" aria-labelledby="review-heading">
+    <p class="section-label">Driver stories</p>
+    <h2 id="review-heading">Real drivers, real earnings.</h2>
+    <div class="review-grid">
+      <div class="review-card">
+        <p>"I drive 300 miles a week for work anyway. Adding WrapRide was the easiest decision I've ever made — it's like getting a raise I didn't have to ask for."</p>
+        <div class="review-author">Marcus T. — Houston, TX</div>
+        <span class="review-earnings">$1,140 / month</span>
+      </div>
+      <div class="review-card">
+        <p>"I was skeptical at first. Now I'm on my third campaign and my friends always ask where I got my 'fancy new paint job.' The wrap looks that clean."</p>
+        <div class="review-author">Priya K. — Austin, TX</div>
+        <span class="review-earnings">$690 / month</span>
+      </div>
+      <div class="review-card">
+        <p>"The install took less than a day and the payments have never been late. Honestly surprised at how smooth the whole thing has been."</p>
+        <div class="review-author">DeShawn R. — Chicago, IL</div>
+        <span class="review-earnings">$975 / month</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BAND -->
+  <div class="cta-band">
+    <h2>Ready to turn your<br><span>commute into cash?</span></h2>
+    <a href="calculator.html" class="btn-primary">See What You'd Earn</a>
+  </div>
+
+  <!-- Footer (ai was helful to organize and make the small text look good)--> 
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">WrapRide</a>
+        <p>Turn your daily commute into a passive income stream. No extra hours, no boss, just drive.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Drivers</h4>
+        <ul>
+          <li><a href="calculator.html">Earnings Calculator</a></li>
+          <li><a href="shop.html">Browse Wraps</a></li>
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="forum.html">Community</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">How It Works</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+    </div>
+   
+  </footer>
+
+  <script>
+   
+    const statEls = document.querySelectorAll('.stat strong[data-target]');
+
+    function formatNumber(n, prefix, suffix) {// ai made the function
+      let display = n >= 1000 ? (n / 1000).toFixed(0) + 'k' : n.toString();
+      return (prefix || '') + display + (suffix || ''); 
+    }
+
+    function countUp(el) {
+      const target = parseInt(el.dataset.target);
+      const prefix = el.dataset.prefix || '';
+      const suffix = el.dataset.suffix || '';
+      const duration = 1400;
+      const steps = 60;
+      const increment = target / steps;
+      let current = 0;
+      let step = 0;
+
+      const timer = setInterval(() => { //i wrote most of this but ai helped with bugs
+        step++;
+        current = Math.min(Math.round(increment * step), target);
+        el.textContent = formatNumber(current, prefix, suffix);
+        if (current >= target) clearInterval(timer);
+      }, duration / steps);
+    }
+
+    const statsObserver = new IntersectionObserver((entries) => { //AI made this to help update values
+      entries.forEach(entry => { 
+        if (entry.isIntersecting) {
+          statEls.forEach(el => countUp(el));
+          statsObserver.disconnect();
+        }
+      });
+    }, { threshold: 0.4 });
+
+    statsObserver.observe(document.querySelector('.stats'));
+
+
+    // earnings
+    const liveEl = document.getElementById('live-total');
+
     
+    let liveTotal = 48320 + Math.floor(Math.random() * 500);
+
+    function formatLive(n) {
+      return '$' + n.toLocaleString();
+    }
+
+    liveEl.textContent = formatLive(liveTotal);
+
+   
+    setInterval(() => {
+      const bump = Math.floor(Math.random() * 8) + 1;
+      liveTotal += bump
+      liveEl.textContent = formatLive(liveTotal)
+    }, 2800);
+  </script>
+
 </body>
 </html>

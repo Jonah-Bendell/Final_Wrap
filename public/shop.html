@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wrap Shop — WrapRide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+
+  
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav aria-label="Main navigation">
+    <a href="index.html" class="logo">WrapRide</a>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="calculator.html">Calculator</a></li>
+      <li><a href="shop.html">Wrap Shop</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="forum.html">Community</a></li>
+      <li><a href="calculator.html" class="nav-cta">Start Earning</a></li>
+    </ul>
+  </nav>
+
+  <!-- HEADER -->
+  <div class="section" style="padding-bottom: 2rem;">
+
+    <h2 style="margin-bottom: 0.5rem;">Wrap Shop</h2>
+    <p style="color: var(--muted); font-size: 0.95rem;">Browse active brand campaigns and apply for the ones that fit your drive.</p>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filter-bar">
+    <button class="filter-btn active" data-value="all">All</button>
+    <button class="filter-btn" data-value="full">Full Wrap</button>
+    <button class="filter-btn" data-value="partial">Partial Wrap</button>
+    <button class="filter-btn" data-value="high-payout">$0.20+/mile</button>
+  </div>
+
+  <p class="results-meta" id="results-meta"></p>
+
+  <!-- GRID -->
+  <div class="shop-grid" id="shop-grid">
+    <div class="empty-state" id="empty-state">
+
+
+
+
+      <p>No campaigns match that filter.</p>
+
+
+
+
+    </div>
+  </div>
+
+  <!-- footer -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+
+
+
+        <a href="index.html" class="logo">WrapRide</a>
+        <p>Turn your daily commute into a passive income stream.</p>
+      </div>
+      <div class="footer-col">
+
+
+
+        <h4>Drivers</h4>
+        <ul>
+          <li><a href="calculator.html">Earnings Calculator</a></li>
+          <li><a href="shop.html">Browse Wraps</a></li>
+          <li><a href="dashboard.html">Dashboard</a></li>
+
+
+    <li><a href="forum.html">Community</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">How It Works</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">FAQ</a></li>
+
+
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">2025 WrapRide</p>
+    </div>
+  </footer>
+
+  <script>
+    const campaigns = [
+      { id:1, brand:'Netflix',  name:'Stranger Things S5', emoji:'📺', theme:'netflix',  coverage:'full',    days:90,  payout:0.18, tag:'hot' },
+      { id:2, brand:'Red Bull', name:'Summer Edition',     emoji:'🐂', theme:'redbull',  coverage:'partial', days:60,  payout:0.22, tag:'new' },
+      { id:3, brand:'Spotify',  name:'Loud & Clear',       emoji:'🎵', theme:'spotify',  coverage:'partial', days:45,  payout:0.15, tag:''    },
+      { id:4, brand:'Amazon',   name:'Prime Day 2025',     emoji:'📦', theme:'amazon',   coverage:'full',    days:30,  payout:0.20, tag:'hot' },
+      { id:5, brand:'Nike',     name:"Just Do It '25",     emoji:'👟', theme:'nike',     coverage:'full',    days:120, payout:0.25, tag:'hot' },
+      { id:6, brand:'Hulu',     name:'Summer Lineup',      emoji:'📡', theme:'hulu',     coverage:'partial', days:60,  payout:0.16, tag:'new' },
+      { id:7, brand:'Samsung',  name:'Galaxy S25 Launch',  emoji:'📱', theme:'samsung',  coverage:'full',    days:75,  payout:0.21, tag:''    },
+    ];
+
+    let activeFilter = 'all';
+    let applied = JSON.parse(localStorage.getItem('wr-applied') || '[]');
+
+    function renderGrid() {
+      const grid  = document.getElementById('shop-grid');
+      const empty = document.getElementById('empty-state');
+      grid.querySelectorAll('.wrap-card').forEach(el => el.remove());
+
+      const results = campaigns.filter(c => {
+        if (activeFilter === 'full')         return c.coverage === 'full';
+        if (activeFilter === 'partial')      return c.coverage === 'partial';
+        if (activeFilter === 'high-payout')  return c.payout >= 0.20;
+        return true;
+      });
+
+      document.getElementById('results-meta').textContent = `Showing ${results.length} campaign${results.length !== 1 ? 's' : ''}`;
+
+      if (results.length === 0) { empty.style.display = 'block'; return; }
+      empty.style.display = 'none';
+
+      results.forEach(c => {
+        const isApplied = applied.includes(c.id);
+        const card = document.createElement('div');
+        card.className = 'wrap-card';
+        card.innerHTML = `
+          <div class="wrap-thumb ${c.theme}" role="img" aria-label="${c.brand} campaign">
+            <span aria-hidden="true">${c.emoji}</span>
+            ${c.tag ? `<span class="wrap-badge">${c.tag}</span>` : ''}
+          </div>
+          <div class="wrap-body">
+            <p class="wrap-brand">${c.brand}</p>
+            <h3>${c.name}</h3>
+            <p class="wrap-meta" style="margin-bottom: 1rem;">
+              ${c.coverage} wrap &middot; ${c.days} days &middot; <strong>$${c.payout.toFixed(2)}/mile</strong>
+            </p>
+            <button class="wrap-apply-btn ${isApplied ? 'applied' : ''}" data-id="${c.id}">
+              ${isApplied ? '✓ Applied' : 'Apply Now'}
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+        card.querySelector('.wrap-apply-btn').addEventListener('click', () => toggleApply(c.id));
+      });
+    }
+
+    function toggleApply(id) {
+      if (applied.includes(id)) {
+        applied = applied.filter(i => i !== id);
+      } else {
+        applied.push(id);
+      }
+      localStorage.setItem('wr-applied', JSON.stringify(applied));
+      renderGrid();
+    }
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeFilter = btn.dataset.value;
+        renderGrid();
+      });
+    });
+
+    renderGrid();
+  </script>
+
+</body>
+</html>
