@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculator</title>
+ 
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+
+  <style>
+    .calc-layout {
+
+
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 70vh;
+    }
+
+    .calc-inputs {
+
+
+
+      padding: 4rem 3rem;
+      border-right: 1px solid var(--border);
+    }
+
+    .calc-result {
+
+      padding: 4rem 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: var(--gray);
+    }
+
+    .input-group {
+
+      margin-bottom: 2rem;
+    }
+
+    .input-group label {
+
+      display: block;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+
+    }
+
+    .input-group input,
+    .input-group select {
+      width: 100%;
+      background: var(--gray);
+      color: var(--white);
+
+      border-radius: 4px;
+  
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+
+    }
+
+    .input-group input:focus,
+    .input-group select:focus {
+      outline: none;
+      border-color: var(--yellow);
+            transition: border-color 0.15s;
+    }
+
+    
+
+    .result-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .result-amount {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 8vw, 7rem);
+      color: var(--yellow);
+   
+      margin-bottom: 0.5rem;
+    }
+
+    .result-sub {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+    }
+
+    .result-breakdown {
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+
+    }
+
+    .breakdown-row {
+      display: flex;
+  
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+
+ 
+
+    .result-placeholder {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+  
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav aria-label="Main navigation">
+    <a href="index.html" class="logo">WrapRide</a>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="calculator.html">Calculator</a></li>
+      <li><a href="shop.html">Wrap Shop</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="forum.html">Community</a></li>
+      <li><a href="calculator.html" class="nav-cta">Start Earning</a></li>
+    </ul>
+  </nav>
+
+  <!--eader -->
+  <div class="section" style="padding-bottom: 2rem;">
+    <p class="section-label">Earnings Calculator</p>
+    <h2 style="margin-bottom: 0.5rem;">How much could you make?</h2>
+    <p style="color: var(--muted); font-size: 0.95rem;">Enter your daily mileage and pick a campaign to see your estimated monthly earnings.</p>
+  </div>
+
+  <!--calc -->
+  <div class="calc-layout">
+
+    <!--iferent inputs -->
+    <div class="calc-inputs">
+
+      <div class="input-group">
+        <label for="miles">Miles you drive per day</label>
+        <input
+          type="number"
+          id="miles"
+
+          placeholder="e.g. 40"
+          aria-label="Miles driven per day"
+        />
+      </div>
+
+      <div class="input-group">
+        <label for="program">Campaign / program</label>
+        <select id="program" aria-label="Select a campaign">
+          <option value="" disabled selected>Select a campaign...</option>
+          <option value="0.18">Netflix - Stranger Things S5 ($0.18/mile)</option>
+          <option value="0.22">Red Bull - Summer Edition ($0.22/mile)</option>
+          <option value="0.15">Spotify - Loud & Clear ($0.15/mile)</option>
+          <option value="0.20">Amazon - Prime Day 2025 ($0.20/mile)</option>
+          <option value="0.25">Nike - Just Do It '25 ($0.25/mile)</option>
+          <option value="0.16">Hulu - Summer Lineup ($0.16/mile)</option>
+          <option value="0.21">Samsung - Galaxy S25 Launch ($0.21/mile)</option>
+        </select>
+      </div>
+
+    </div>
+
+    <!-- results -->
+    <div class="calc-result">
+      <div id="result-placeholder">
+        <p class="result-placeholder">Enter your daily miles and pick a campaign on the left to see your estimated monthly earnings.</p>
+      </div>
+
+      <div id="result-output" style="display: none;">
+        <p class="result-label">Estimated monthly earnings</p>
+        <p class="result-amount" id="result-amount">$0</p>
+        <p class="result-sub" id="result-sub"></p>
+        <div class="result-breakdown" id="result-breakdown"></div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- footer -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+
+
+
+        <a href="index.html" class="logo">WrapRide</a>
+        <p>Turn your daily commute into a passive income stream.</p>
+      </div>
+      <div class="footer-col">
+
+
+
+        <h4>Drivers</h4>
+        <ul>
+          <li><a href="calculator.html">Earnings Calculator</a></li>
+          <li><a href="shop.html">Browse Wraps</a></li>
+          <li><a href="dashboard.html">Dashboard</a></li>
+
+
+    <li><a href="forum.html">Community</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">How It Works</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">FAQ</a></li>
+
+
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">2025 WrapRide</p>
+    </div>
+  </footer>
+
+  <script>
+    const milesInput   = document.getElementById('miles');
+    const programInput = document.getElementById('program');
+
+    function calculate() {
+      const miles  = parseInt(milesInput.value);
+      const rate   = parseFloat(programInput.value);
+
+      
+      const daily   = miles * rate;
+      const weekly  = daily * 7;
+      const monthly = daily * 30;
+
+      document.getElementById('result-placeholder').style.display = 'none';
+      document.getElementById('result-output').style.display      = 'block';
+
+      document.getElementById('result-amount').textContent =
+        '$' + Math.round(monthly).toLocaleString();
+
+      document.getElementById('result-sub').textContent =
+        `Based on ${miles} miles/day at $${rate.toFixed(2)}/mile`;
+
+      document.getElementById('result-breakdown').innerHTML = `
+        <div class="breakdown-row"><span>Per day</span><span>$${daily.toFixed(2)}</span></div>
+        <div class="breakdown-row"><span>Per week</span><span>$${weekly.toFixed(2)}</span></div>
+        <div class="breakdown-row"><span>Per month (30 days)</span><span>$${Math.round(monthly).toLocaleString()}</span></div>
+        <div class="breakdown-row"><span>Per year</span><span>$${Math.round(daily * 365).toLocaleString()}</span></div>
+      `;
+
+      
+    }
+
+   
+    milesInput.addEventListener('input', calculate);
+    programInput.addEventListener('change', calculate);
+  </script>
+
+</body>
+</html>
