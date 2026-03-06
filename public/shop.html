@@ -93,9 +93,7 @@
         </ul>
       </div>
     </div>
-    <div class="footer-bottom">
-      <p class="footer-copy">2025 WrapRide</p>
-    </div>
+    <div class="footer-bottom"></div>
   </footer>
 
   <script>
@@ -144,11 +142,11 @@
             <p class="wrap-meta" style="margin-bottom: 1rem;">
               ${c.coverage} wrap &middot; ${c.days} days &middot; <strong>$${c.payout.toFixed(2)}/mile</strong>
             </p>
-            <button class="wrap-apply-btn ${isApplied ? 'applied' : ''}" data-id="${c.id}">
-              ${isApplied ? '✓ Applied' : 'Apply Now'}
+            <button class="wrap-apply-btn ${isApplied ? 'applied' : ''}" data-id="${c.id}"> 
+              ${isApplied ? 'Applied' : 'Apply Now'}
             </button>
           </div>
-        `;
+        `;//Ok so I made an apply button to get the actual sponsorship but it doesn't do anythin cause this is not a real company but it was this would take you to a place to buy the wraps
         grid.appendChild(card);
         card.querySelector('.wrap-apply-btn').addEventListener('click', () => toggleApply(c.id));
       });

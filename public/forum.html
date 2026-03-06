@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Forums</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .chat-layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+
+    }
+
+    .chat-main {
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--border);
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 2rem 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .chat-msg { display: flex; flex-direction: column; gap: 0.2rem; }
+
+    .chat-msg-header {
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+    }
+
+    .chat-msg-user {
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: var(--yellow);
+    }
+
+    .chat-msg-time {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .chat-msg-text {
+      font-size: 0.92rem;
+      color: #ccc;
+      line-height: 1.6;
+    }
+
+  
+
+    .chat-input-bar {
+      padding: 1.2rem 3rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 0.8rem;
+      background: var(--gray);
+    }
+
+    .chat-input-bar input {
+      flex: 1;
+      background: var(--black);
+      color: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.7rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.92rem;
+      transition: border-color 0.15s;
+    }
+
+    .chat-input-bar input:focus { outline: none; border-color: var(--yellow); }
+
+    .chat-sidebar {
+      padding: 2rem 1.5rem;
+      background: var(--gray);
+    }
+
+    .chat-sidebar h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.03em;
+      margin-bottom: 1.2rem;
+      color: var(--muted);
+    }
+
+    .online-dot {
+      display: inline-block;
+      width: 7px; height: 7px;
+      background: #2ecc71;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+
+    .online-user {
+      font-size: 0.88rem;
+      color: #ccc;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logged-out-msg {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--muted);
+    }
+
+    .logged-out-msg a { color: var(--yellow); }
+
+    @media (max-width: 800px) {
+      .chat-layout { grid-template-columns: 1fr; }
+      .chat-sidebar { display: none; }
+      .chat-messages { padding: 1.5rem; }
+      .chat-input-bar { padding: 1rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="logo">WrapRide</a>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="calculator.html">Calculator</a></li>
+      <li><a href="shop.html">Wrap Shop</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="forum.html">Community</a></li>
+      <li id="nav-auth-item"><a href="login.html" class="nav-cta">Log In</a></li>
+    </ul>
+  </nav>
+
+  <!--not logged in page-->
+  <div id="logged-out" style="display:none;">
+    <div class="logged-out-msg">
+
+      <p style="margin-bottom:1rem;">You need an account to join the chat.</p>
+      <a href="login.html" class="btn-primary">Log In or Sign Up</a>
+    </div>
+  </div>
+
+  <!--actual chate bar and page-->
+  <div id="chat-app" style="display:none;">
+    <div class="chat-layout">
+
+      <div class="chat-main">
+        <div class="chat-messages" id="chat-messages"></div>
+        <div class="chat-input-bar">
+          <input type="text" id="chat-input" placeholder="Say something to the community..." maxlength="200" />
+          <button class="btn-primary" id="send-btn" style="border:none; cursor:pointer;">Send</button>
+        </div>
+      </div>
+
+      <div class="chat-sidebar">
+        <h3>Online Now</h3>
+        <div id="online-list"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const currentUser = localStorage.getItem('wr-user');
+
+    // update nav to show username or log in
+    if (currentUser) {
+      const authItem = document.getElementById('nav-auth-item');
+      authItem.innerHTML = `<span style="color:var(--muted);font-size:0.88rem;">${currentUser}</span>
+        &nbsp;<a href="#" id="logout-btn" style="color:var(--muted);font-size:0.85rem;">Log out</a>`;
+      document.getElementById('logout-btn')?.addEventListener('click', () => {
+        localStorage.removeItem('wr-user');
+        window.location.reload();
+      });
+    }
+
+    if (!currentUser) {
+      document.getElementById('logged-out').style.display = 'block';
+    } else {
+      document.getElementById('chat-app').style.display = 'block';
+      initChat();
+    }
+
+    function initChat() {
+      const ws = new WebSocket('ws://localhost:3001');
+      const messagesEl = document.getElementById('chat-messages');
+      const inputEl    = document.getElementById('chat-input');
+      const onlineEl   = document.getElementById('online-list');
+      const onlineUsers = new Set();
+
+      ws.addEventListener('message', (event) => {
+        const data = JSON.parse(event.data);
+
+        if (data.type === 'history') {
+          data.messages.forEach(msg => appendMessage(msg));
+          scrollToBottom();
+        }
+
+        if (data.type === 'message') {
+          appendMessage(data.message);
+          scrollToBottom();
+          onlineUsers.add(data.message.user);
+          renderOnline();
+        }
+
+        if (data.type === 'online') {
+          data.users.forEach(u => onlineUsers.add(u));
+          renderOnline();
+        }
+      });
+
+      function sendMessage() {
+        const text = inputEl.value.trim();
+        if (!text || ws.readyState !== WebSocket.OPEN) return;
+        ws.send(JSON.stringify({ user: currentUser, text }));
+        inputEl.value = '';
+      }
+
+      document.getElementById('send-btn').addEventListener('click', sendMessage);
+
+      inputEl.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') sendMessage();
+      });
+
+      function appendMessage(msg) {
+        const isMine = msg.user === currentUser;
+        const div = document.createElement('div');
+        div.className = 'chat-msg' + (isMine ? ' mine' : '');
+        div.innerHTML = `
+          <div class="chat-msg-header">
+            <span class="chat-msg-user">${msg.user}</span>
+            <span class="chat-msg-time">${msg.time}</span>
+          </div>
+          <p class="chat-msg-text">${escapeHTML(msg.text)}</p>
+        `;
+        messagesEl.appendChild(div);
+      }
+
+      function scrollToBottom() {
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+      }
+
+      function renderOnline() {
+        onlineEl.innerHTML = [...onlineUsers].map(u => `
+          <div class="online-user"><span class="online-dot"></span>${u}</div>
+        `).join('');
+      }
+
+      // announce yourself as online
+      onlineUsers.add(currentUser);
+      renderOnline();
+
+      function escapeHTML(str) {
+        return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      }
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login/signup</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .auth-wrap { /* Due to time contraints AI helped with the css here*/
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem;
+    }
+
+    .auth-box {
+      width: 100%;
+      max-width: 400px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2.5rem;
+      background: var(--gray);
+    }
+
+    .auth-box h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .auth-box p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+
+    .input-group { margin-bottom: 1.2rem; }
+
+    .input-group label {
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .input-group input {
+      width: 100%;
+      background: var(--black);
+      color: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.75rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      transition: border-color 0.15s;
+    }
+
+    .input-group input:focus { outline: none; border-color: var(--yellow); }
+
+    .auth-btn {
+      width: 100%;
+      margin-top: 0.5rem;
+      border: none;
+      cursor: pointer;
+      padding: 0.85rem;
+      font-size: 0.95rem;
+    }
+
+    .auth-switch {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .auth-switch a { color: var(--yellow); cursor: pointer; }
+
+    .auth-error {
+      font-size: 0.82rem;
+      color: var(--orange);
+      margin-top: 0.8rem;
+      min-height: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="logo">WrapRide</a>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="calculator.html">Calculator</a></li>
+      <li><a href="shop.html">Wrap Shop</a></li>
+    </ul>
+  </nav>
+
+  <div class="auth-wrap">
+    <div class="auth-box">
+
+      <!--Log in-->
+      <div id="login-form">
+        <h1>Welcome back.</h1>
+        <p>Log in to your WrapRide account.</p>
+        <div class="input-group">
+          <label for="login-username">Username</label>
+          <input type="text" id="login-username" placeholder="your username" />
+        </div>
+        <div class="input-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" placeholder="••••••••" />
+        </div>
+        <button class="btn-primary auth-btn" id="login-btn">Log In</button>
+        <p class="auth-error" id="login-error"></p>
+        <p class="auth-switch">No account? <a id="show-signup">Sign up</a></p>
+      </div>
+
+      <!--Sign up-->
+      <div id="signup-form" style="display:none;">
+        <h1>Create account.</h1>
+        <p>Join WrapRide and start earning.</p>
+        <div class="input-group">
+          <label for="signup-username">Username</label>
+          <input type="text" id="signup-username" placeholder="pick a username" />
+        </div>
+        <div class="input-group">
+          <label for="signup-password">Password</label>
+          <input type="password" id="signup-password" placeholder="••••••••" />
+        </div>
+        <button class="btn-primary auth-btn" id="signup-btn">Create Account</button>
+        <p class="auth-error" id="signup-error"></p>
+        <p class="auth-switch">Already have an account? <a id="show-login">Log in</a></p>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const API = 'http://localhost:3000/api';
+
+    // toggle different forms
+    document.getElementById('show-signup').addEventListener('click', () => {
+      document.getElementById('login-form').style.display = 'none';
+      document.getElementById('signup-form').style.display = 'block';
+    });
+
+    document.getElementById('show-login').addEventListener('click', () => {
+      document.getElementById('signup-form').style.display = 'none';
+      document.getElementById('login-form').style.display = 'block';
+    });
+
+    // login AI supported this process
+    document.getElementById('login-btn').addEventListener('click', async () => {
+      const username = document.getElementById('login-username').value.trim();
+      const password = document.getElementById('login-password').value;
+      try {
+        const res = await fetch(API + '/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+        if (!res.ok) { document.getElementById('login-error').textContent = data.error; return; }
+        localStorage.setItem('wr-user', username);
+        window.location.href = 'dashboard.html';
+      } catch (e) {
+        document.getElementById('login-error').textContent = 'Could not connect to server.';
+      }
+    });
+
+    // signup
+    document.getElementById('signup-btn').addEventListener('click', async () => {
+      const username = document.getElementById('signup-username').value.trim();
+      const password = document.getElementById('signup-password').value;
+      try {
+        const res = await fetch(API + '/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+        if (!res.ok) { document.getElementById('signup-error').textContent = data.error; return; }
+        localStorage.setItem('wr-user', username);
+        window.location.href = 'dashboard.html';
+      } catch (e) {
+        document.getElementById('signup-error').textContent = 'Could not connect to server.';
+      }
+    });
+
+    // if already logged in skip to dashboard
+    if (localStorage.getItem('wr-user')) window.location.href = 'dashboard.html';
+  </script>
+
+</body>
+</html>

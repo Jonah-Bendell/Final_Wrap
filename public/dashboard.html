@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <title>Dashboard — WrapRide</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
-
   <style>
     .dash-grid {
       display: grid;
@@ -37,11 +36,7 @@
       line-height: 1;
     }
 
-    .dash-stat-sub {
-      font-size: 0.8rem;
-      color: var(--muted);
-      margin-top: 0.3rem;
-    }
+    .dash-stat-sub { font-size: 0.8rem; color: var(--muted); margin-top: 0.3rem; }
 
     .log-form {
       display: flex;
@@ -55,8 +50,32 @@
 
     .log-form .input-group { margin-bottom: 0; flex: 1; min-width: 140px; }
 
-    
-    .chart-section { padding: 3rem; border-bottom: 1px solid var(--border); } /*AI had to help make most of the chart*/
+    .input-group label {
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .input-group input,
+    .input-group select {
+      width: 100%;
+      background: var(--black);
+      color: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.75rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.92rem;
+      transition: border-color 0.15s;
+    }
+
+    .input-group input:focus,
+    .input-group select:focus { outline: none; border-color: var(--yellow); }
+
+    .chart-section { padding: 3rem; border-bottom: 1px solid var(--border); }
 
     .chart-section h3 {
       font-family: 'Bebas Neue', sans-serif;
@@ -99,7 +118,7 @@
 
     .log-empty { text-align: center; padding: 3rem 0; color: var(--muted); font-size: 0.9rem; }
 
-    .status-msg { font-size: 0.82rem; color: var(--muted); padding: 0 3rem 0.5rem; min-height: 1.5rem; }
+    .status-msg { font-size: 0.82rem; color: var(--muted); padding: 0.5rem 3rem; min-height: 1.5rem; }
     .status-msg.error { color: var(--orange); }
 
     .delete-btn {
@@ -112,6 +131,7 @@
       .dash-grid { grid-template-columns: 1fr; }
       .dash-stat { border-right: none; border-bottom: 1px solid var(--border); }
       .log-form, .chart-section, .log-section { padding: 2rem 1.5rem; }
+      .status-msg { padding: 0.5rem 1.5rem; }
     }
   </style>
 </head>
@@ -125,13 +145,13 @@
       <li><a href="shop.html">Wrap Shop</a></li>
       <li><a href="dashboard.html">Dashboard</a></li>
       <li><a href="forum.html">Community</a></li>
-      <li><a href="calculator.html" class="nav-cta">Start Earning</a></li>
+      <li id="nav-auth-item"></li>
     </ul>
   </nav>
 
   <div class="section" style="padding-bottom: 2rem;">
     <p class="section-label">Driver Dashboard</p>
-    <h2 style="margin-bottom: 0.5rem;">Your earnings.</h2>
+    <h2 style="margin-bottom: 0.5rem;" id="dash-heading">Your earnings.</h2>
     <p style="color: var(--muted); font-size: 0.95rem;">Log your drives and track how much you're making this month.</p>
   </div>
 
@@ -153,7 +173,7 @@
     </div>
   </div>
 
-  <div>
+  <div class="log-form">
     <div class="input-group">
       <label for="log-date">Date</label>
       <input type="date" id="log-date" />
@@ -165,13 +185,13 @@
     <div class="input-group">
       <label for="log-campaign">Campaign</label>
       <select id="log-campaign">
-        <option value="0.18-Netflix">Netflix - $0.18/mile</option>
-        <option value="0.22-Red Bull">Red Bull - $0.22/mile</option>
-        <option value="0.15-Spotify">Spotify - $0.15/mile</option>
-        <option value="0.20-Amazon">Amazon - $0.20/mile</option>
-        <option value="0.25-Nike">Nike - $0.25/mile</option>
-        <option value="0.16-Hulu">Hulu - $0.16/mile</option>
-        <option value="0.21-Samsung">Samsung - $0.21/mile</option>
+        <option value="0.18|Netflix">Netflix -$0.18/mile</option>
+        <option value="0.22|Red Bull">Red Bull - $0.22/mile</option>
+        <option value="0.15|Spotify">Spotify - $0.15/mile</option>
+        <option value="0.20|Amazon">Amazon - $0.20/mile</option>
+        <option value="0.25|Nike">Nike - $0.25/mile</option>
+        <option value="0.16|Hulu">Hulu - $0.16/mile</option>
+        <option value="0.21|Samsung">Samsung - $0.21/mile</option>
       </select>
     </div>
     <button class="btn-primary" id="log-btn" style="flex-shrink:0; border:none; cursor:pointer;">Log Drive</button>
@@ -210,20 +230,35 @@
         <h4>Company</h4>
         <ul>
           <li><a href="#">About</a></li>
-          <li><a href="#">How It Works</a></li>
           <li><a href="#">Contact</a></li>
           <li><a href="#">FAQ</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
+
     </div>
   </footer>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js">//ai supported the chart making</script>
   <script>
-    const API = 'http://localhost:3000/api/drives';
+    const API = 'http://localhost:3000/api';
+
+    // redirect if not logged in
+    const currentUser = localStorage.getItem('wr-user');
+    if (!currentUser) window.location.href = 'login.html';
+
+    // show username in heading and nav
+    document.getElementById('dash-heading').textContent = currentUser + "'s earnings.";
+    document.getElementById('nav-auth-item').innerHTML =
+      `<span style="color:var(--muted);font-size:0.88rem;">${currentUser}</span>
+       &nbsp;<a href="#" id="logout-btn" style="color:var(--muted);font-size:0.85rem;">Log out</a>`;
+
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      localStorage.removeItem('wr-user');
+      window.location.href = 'login.html';
+    });
+
     let drives = [];
     let chart = null;
 
@@ -235,10 +270,9 @@
       el.className = 'status-msg' + (isError ? ' error' : '');
     }
 
-
-    async function loadDrives() {
+    async function loadDrives() { // I did most the API code but AI helped with a lot of bugs
       try {
-        const res = await fetch(API);
+        const res = await fetch(`${API}/drives?username=${encodeURIComponent(currentUser)}`);
         drives = await res.json();
         drives.sort((a, b) => new Date(b.date) - new Date(a.date));
         render();
@@ -246,7 +280,6 @@
         setStatus('Could not connect to server.', true);
       }
     }
-
 
     document.getElementById('log-btn').addEventListener('click', async () => {
       const date  = document.getElementById('log-date').value;
@@ -259,14 +292,12 @@
       }
 
       setStatus('Saving...');
-
       try {
-        const res = await fetch(API, {
+        const res = await fetch(`${API}/drives`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ date, miles, rate, campaign })
+          body: JSON.stringify({ username: currentUser, date, miles, rate, campaign })
         });
-
         if (!res.ok) throw new Error();
         document.getElementById('log-miles').value = '';
         setStatus('Drive saved!');
@@ -276,53 +307,46 @@
       }
     });
 
-
     async function deleteDrive(id) {
       try {
-        await fetch(API + '/' + id, { method: 'DELETE' });
+        await fetch(`${API}/drives/${id}`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: currentUser })
+        });
         loadDrives();
       } catch (e) {
-        setStatus('Failed to delete drive.', true);
+        setStatus('Failed to delete.', true);
       }
     }
 
-
-    function render() {
+    function render() { // here is where AI helped to develop  the graph
       renderStats();
       renderChart();
       renderLog();
     }
 
-    function renderStats() {//AI halped make the chart but this is a really cool new concept 
+    function renderStats() {
       const now = new Date();
       const thisMonth = drives.filter(d => {
         const dd = new Date(d.date + 'T00:00:00');
         return dd.getMonth() === now.getMonth() && dd.getFullYear() === now.getFullYear();
       });
-
-      const totalMiles    = thisMonth.reduce((s, d) => s + d.miles, 0);
-      const totalEarnings = thisMonth.reduce((s, d) => s + d.miles * d.rate, 0);
-
-      document.getElementById('stat-miles').textContent    = totalMiles.toLocaleString();
-      document.getElementById('stat-earnings').textContent = '$' + totalEarnings.toFixed(2);
+      document.getElementById('stat-miles').textContent    = thisMonth.reduce((s,d) => s+d.miles, 0).toLocaleString();
+      document.getElementById('stat-earnings').textContent = '$' + thisMonth.reduce((s,d) => s+d.miles*d.rate, 0).toFixed(2);
       document.getElementById('stat-drives').textContent   = thisMonth.length;
     }
 
-    function renderChart() { 
-      const sorted = [...drives].sort((a, b) => new Date(a.date) - new Date(b.date));
+    function renderChart() {
+      const sorted = [...drives].sort((a,b) => new Date(a.date)-new Date(b.date));
       const byDate = {};
-      sorted.forEach(d => { byDate[d.date] = (byDate[d.date] || 0) + d.miles * d.rate; });
-
+      sorted.forEach(d => { byDate[d.date] = (byDate[d.date]||0) + d.miles*d.rate; });
       const labels = Object.keys(byDate);
       let running = 0;
-      const data = labels.map(date => {
-        running += byDate[date];
-        return parseFloat(running.toFixed(2));
-      });
+      const data = labels.map(date => { running += byDate[date]; return parseFloat(running.toFixed(2)); });
 
       if (chart) chart.destroy();
-      const ctx = document.getElementById('earnings-chart').getContext('2d');
-      chart = new Chart(ctx, {
+      chart = new Chart(document.getElementById('earnings-chart').getContext('2d'), {
         type: 'line',
         data: {
           labels,
@@ -342,8 +366,8 @@
           maintainAspectRatio: false,
           plugins: { legend: { display: false } },
           scales: {
-            x: { ticks: { color: '#777', font: { family: 'DM Sans', size: 11 } }, grid: { color: '#242424' } },
-            y: { ticks: { color: '#777', font: { family: 'DM Sans', size: 11 }, callback: v => '$' + v }, grid: { color: '#242424' } }
+            x: { ticks: { color:'#777', font:{family:'DM Sans',size:11} }, grid:{color:'#242424'} },
+            y: { ticks: { color:'#777', font:{family:'DM Sans',size:11}, callback: v => '$'+v }, grid:{color:'#242424'} }
           }
         }
       });
@@ -355,27 +379,21 @@
         container.innerHTML = '<p class="log-empty">No drives logged yet. Add your first drive above.</p>';
         return;
       }
-//i made most of the table stuff but AI helped finalize it 
-      const rows = drives.slice(0, 20).map(d => `
+      const rows = drives.slice(0,20).map(d => `
         <tr>
           <td>${d.date}</td>
           <td>${d.campaign}</td>
           <td>${d.miles} mi</td>
           <td>$${parseFloat(d.rate).toFixed(2)}/mi</td>
-          <td class="earn">$${(d.miles * d.rate).toFixed(2)}</td>
-          <td><button class="delete-btn" data-id="${d.id}" aria-label="Delete drive">✕</button></td>
+          <td class="earn">$${(d.miles*d.rate).toFixed(2)}</td>
+          <td><button class="delete-btn" data-id="${d.id}" aria-label="Delete">✕</button></td>
         </tr>
       `).join('');
-
       container.innerHTML = `
         <table class="log-table">
-          <thead><tr>
-            <th>Date</th><th>Campaign</th><th>Miles</th><th>Rate</th><th>Earned</th><th></th>
-          </tr></thead>
+          <thead><tr><th>Date</th><th>Campaign</th><th>Miles</th><th>Rate</th><th>Earned</th><th></th></tr></thead>
           <tbody>${rows}</tbody>
-        </table>
-      `;
-
+        </table>`;
       container.querySelectorAll('.delete-btn').forEach(btn =>
         btn.addEventListener('click', () => deleteDrive(parseInt(btn.dataset.id)))
       );
