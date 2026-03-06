@@ -71,9 +71,7 @@ app.delete('/api/drives/:id', (req, res) => {
 });
 
 //websockets
-app.listen(PORT, () => console.log('Running on http://localhost:' + PORT));
-
-const server = app.listen(PORT, () => console.log('Running on port ' + PORT)); //AI helped with a render bug here
+const server = app.listen(PORT, () => console.log('Running on port ' + PORT));
 const wss = new WebSocketServer({ server });
 const messages = [];
 
