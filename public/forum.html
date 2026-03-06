@@ -187,7 +187,7 @@
     }
 
     function initChat() {
-      const ws = new WebSocket('ws://localhost:3001');
+      const ws = new WebSocket('wss://final-wrap.onrender.com');
       const messagesEl = document.getElementById('chat-messages');
       const inputEl    = document.getElementById('chat-input');
       const onlineEl   = document.getElementById('online-list');

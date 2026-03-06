@@ -22,7 +22,7 @@ function writeDrives(d) { fs.writeFileSync(DRIVES_FILE, JSON.stringify(d, null, 
 function readUsers()  { return JSON.parse(fs.readFileSync(USERS_FILE,  'utf8')); }
 function writeUsers(u) { fs.writeFileSync(USERS_FILE,  JSON.stringify(u, null, 2)); }
 
-// ── AUTH ──────────────────────────────────────────────────────────────
+//authentification for the users AI helped here
 app.post('/api/signup', (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) return res.status(400).json({ error: 'Missing fields.' });
@@ -40,7 +40,7 @@ app.post('/api/login', (req, res) => {
   res.json({ username });
 });
 
-// ── DRIVES (per user) ─────────────────────────────────────────────────
+//data for the users AI helped here
 app.get('/api/drives', (req, res) => {
   const { username } = req.query;
   if (!username) return res.status(400).json({ error: 'Missing username.' });
@@ -70,10 +70,11 @@ app.delete('/api/drives/:id', (req, res) => {
   res.json({ success: true });
 });
 
-// ── WEBSOCKET ─────────────────────────────────────────────────────────
+//websockets
 app.listen(PORT, () => console.log('Running on http://localhost:' + PORT));
 
-const wss = new WebSocketServer({ port: 3001 });
+const server = app.listen(PORT, () => console.log('Running on port ' + PORT)); //AI helped with a render bug here
+const wss = new WebSocketServer({ server });
 const messages = [];
 
 wss.on('connection', (ws) => {
